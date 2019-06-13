@@ -1,11 +1,14 @@
 package com.bit.web.domain;
 
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
 import lombok.Data;
 
 /**
  * CustomerDTO
  */
-@Data
+@Data @Component @Lazy
 public class CustomerDTO {
     private String customerId,
                     customerName,

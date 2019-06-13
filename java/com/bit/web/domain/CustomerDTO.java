@@ -1,9 +1,20 @@
 package com.bit.web.domain;
 
-/**
- * Customer
- */
-public class Customer {
+import lombok.Data;
 
+/**
+ * CustomerDTO
+ */
+@Data
+public class CustomerDTO {
+    private String customerId,
+                    customerName,
+                    passWord ,
+                    ssn,
+                    phone,
+                    city,
+                    address,
+                    postalcode,
+                    photo;
     
 }

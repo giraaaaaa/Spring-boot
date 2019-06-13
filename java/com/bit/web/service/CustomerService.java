@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public interface CustomerService {
     public void addCustomer(CustomerDTO Customer);
     public List<CustomerDTO> findCustomer(CustomerDTO Customer);
-    public List<CustomerDTO> findCustomerByword(CustomerDTO Customer);
+    public List<CustomerDTO> findCustomerByOption(CustomerDTO Customer);
     public CustomerDTO findCustomerByCustomerId(CustomerDTO Customer);
     public void updateCustomer(CustomerDTO Customer);
     public void deleteCustomer(CustomerDTO Customer);

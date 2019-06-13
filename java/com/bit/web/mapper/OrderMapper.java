@@ -1,6 +1,7 @@
 package com.bit.web.mapper;
 
 import java.util.List;
+import com.bit.web.domain.OrderDTO;
 
 import org.springframework.stereotype.Repository;
 

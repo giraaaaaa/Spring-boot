@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public interface CategoryService {
     public void addCategory(CategoryDTO category);
     public List<CategoryDTO> findCategories(CategoryDTO category);
-    public List<CategoryDTO> findCategoriesByword(CategoryDTO category);
+    public List<CategoryDTO> findCategoriesByOption(CategoryDTO category);
     public CategoryDTO findCategoryBycategoryId(CategoryDTO category);
     public void updateCategory(CategoryDTO category);
     public void deleteCategory(CategoryDTO category);

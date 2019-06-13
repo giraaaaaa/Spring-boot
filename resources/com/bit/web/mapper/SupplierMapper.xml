@@ -2,8 +2,39 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.mybatis.example.BlogMapper">
-  <select id="selectBlog" resultType="Blog">
-    select * from Blog where id = #{id}
+<mapper namespace="org.bit.web.mapper.SupplierMapper">
+
+<insert id="addSupplier"  parameterType="import com.bit.web.domain.SupplierDTO">
+        insert into SUPPLIERS (SUPPLIER_ID, SUPPLIER_NAME, CONTACT_NAME, ADDRESS, CITY, POSTAL_CODE, COUNTRY, PHONE)
+        values (#{supplierId},#{supplierName},#{contactName},#{address},#{city},#{postalCode},#{country},#{phone}) 
+     </insert> 
+     <!-- #쪽은 자바를 따름 -->
+   <select id="selectSupplier" resultType="import com.bit.web.domain.SupplierDTO">
+    select * from Blog SUPPLIERS
   </select>
+  <select id="selectSupplierByword" resultType="import com.bit.web.domain.SupplierDTO"
+                                        parameterType="import com.bit.web.domain.SupplierDTO">
+    select * from Blog SUPPLIERS where SUPPLIER_NAME = #{supplierName}
+  </select>
+  <select id="selectSupplierBySupplierId" resultType="import com.bit.web.domain.SupplierDTO"
+                                        parameterType="string">
+    select * from Blog SUPPLIERS where SUPPLIER_ID = #{value}
+  </select>
+<update  id="updateSupplier"  parameterType="import com.bit.web.domain.SupplierDTO">
+            update Author set
+            SUPPLIER_NAME = #{supplierName},
+            CONTACT_NAME = #{contactName},
+            ADDRESS = #{address},
+            CITY = #{city},
+            POSTAL_CODE = #{postalCode},
+            COUNTRY = #{country}
+            PHONE = #{phone},
+            where SUPPLIER_ID = #{supplierId}
+        </update>
+        
+                
+<delete  id="deleteSupplier"  parameterType="import com.bit.web.domain.SupplierDTO">  
+    delete from SUPPLIERS where SUPPLIER_ID = #{supplierId}
+</delete>
+  
 </mapper>

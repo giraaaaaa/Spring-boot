@@ -24,7 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerDTO> findCustomerByword(CustomerDTO Customer) {
+    public List<CustomerDTO> findCustomerByOption(CustomerDTO Customer) {
         return null;
     }
 

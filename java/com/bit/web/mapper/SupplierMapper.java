@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.bit.web.domain.SupplierDTO;
+
 /**
  * EmpoyeeMapper
  * 

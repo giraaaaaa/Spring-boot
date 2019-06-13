@@ -25,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDTO> findCategoriesByword(CategoryDTO category) {
+    public List<CategoryDTO> findCategoriesByOption(CategoryDTO category) {
         return null;
     }
 

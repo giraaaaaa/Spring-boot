@@ -2,8 +2,37 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.mybatis.example.BlogMapper">
-  <select id="selectBlog" resultType="Blog">
-    select * from Blog where id = #{id}
+<mapper namespace="org.bit.web.mapper.ShipperMapper">
+
+      
+
+<insert id="addShipper"  parameterType="import com.bit.web.domain.ShipperDTO">
+        insert into SHIPPERS (SHIPPER_ID, SHIPPER_NAME, PHONE)
+        values (#{shipperId},#{shipperName},#{phone}) 
+     </insert> 
+     <!-- #쪽은 자바를 따름 -->
+   <select id="selectShipper" resultType="import com.bit.web.domain.ShipperDTO">
+    select * from Blog SHIPPERS
   </select>
+  <select id="selectShipperByOption" resultType="import com.bit.web.domain.ShipperDTO"
+                                        parameterType="import com.bit.web.domain.ShipperDTO">
+    select * from Blog SHIPPERS where SHIPPER_NAME = #{shipperName}
+  </select>
+  <select id="selectShipperByShipperId" resultType="import com.bit.web.domain.ShipperDTO"
+                                        parameterType="string">
+    select * from Blog SHIPPERS where SHIPPER_ID = #{value}
+  </select>
+<update  id="updateShipper"  parameterType="import com.bit.web.domain.ShipperDTO">
+            update Author set
+            SHIPPER_NAME = #{shipperName},
+            PHONE = #{phone},
+           
+            where SHIPPER_ID = #{shipperId}
+        </update>
+
+
+<delete  id="deleteShipper"  parameterType="import com.bit.web.domain.ShipperDTO">  
+    delete from SHIPPERS where SHIPPER_ID = #{shipperId}
+</delete>
+  
 </mapper>

@@ -2,8 +2,39 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.mybatis.example.BlogMapper">
-  <select id="selectBlog" resultType="Blog">
-    select * from Blog where id = #{id}
+<mapper namespace="org.bit.web.mapper.OrderMapper">
+  
+
+
+<insert id="addOrder"  parameterType="import com.bit.web.domain.OrderDTO">
+        insert into ORDERS (ORDER_ID, EMPLOYEE_ID, ORDER_DATE, SHIPPER_ID)
+        values (#{orderId},#{customerId},#{employeeId},#{orderDate},#{shipperId}) 
+     </insert> 
+     <!-- #쪽은 자바를 따름 -->
+   <select id="selectOrder" resultType="import com.bit.web.domain.OrderDTO">
+    select * from Blog ORDERS
   </select>
+  <select id="selectOrderByOption" resultType="import com.bit.web.domain.OrderDTO"
+                                        parameterType="import com.bit.web.domain.OrderDTO">
+    select * from Blog ORDERS where EMPLOYEE_ID = #{customerId}
+  </select>
+  <select id="selectOrderByOrderId" resultType="import com.bit.web.domain.OrderDTO"
+                                        parameterType="string">
+    select * from Blog ORDERS where ORDER_ID = #{value}
+  </select>
+<update  id="updateOrder"  parameterType="import com.bit.web.domain.OrderDTO">
+            update Author set
+            CUSTOMER_ID = #{customerId},
+            EMPLOYEE_ID = #{employeeId},
+            ORDER_DATE = #{orderDate},
+            SHIPPER_ID = #{shipperId},
+            
+            where ORDER_ID = #{orderId}
+        </update>
+  
+          
+<delete  id="deleteOrder"  parameterType="import com.bit.web.domain.OrderDTO">  
+    delete from ORDERS where ORDER_ID = #{orderId}
+</delete>
+  
 </mapper>

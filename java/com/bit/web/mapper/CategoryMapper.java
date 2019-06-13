@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface CategoryMapper {
     public void addCategory(CategoryDTO category);
     public List<CategoryDTO> selectCategories(CategoryDTO category);
-    public List<CategoryDTO> selectCategoriesByword(CategoryDTO category);
+    public List<CategoryDTO> selectCategoriesByOption(CategoryDTO category);
     public CategoryDTO selectCategoryBycategoryId(CategoryDTO category);
     public void updateCategory(CategoryDTO category);
     public void deleteCategory(CategoryDTO category);

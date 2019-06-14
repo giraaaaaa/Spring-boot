@@ -12,7 +12,7 @@ import com.bit.web.domain.SupplierDTO;
  * @param <SupplierDTO>
  */
 @Repository
-public interface SupplierMapper<SupplierDTO> {
+public interface SupplierMapper {
     public void addSupplier(SupplierDTO Supplier);
     public List<SupplierDTO> selectSuppliers(SupplierDTO Supplier);
     public List<SupplierDTO> selectSuppliersByOption(SupplierDTO Supplier);

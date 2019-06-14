@@ -13,7 +13,7 @@ import com.bit.web.domain.ProductDTO;
  * @param <ProductDTO>
  */
 @Repository
-public interface ProductMapper<ProductDTO> {
+public interface ProductMapper {
     public void addEmpoyee(ProductDTO Product);
     public List<ProductDTO> selectProducts(ProductDTO Product);
     public List<ProductDTO> selectProductsByOption(ProductDTO Product);

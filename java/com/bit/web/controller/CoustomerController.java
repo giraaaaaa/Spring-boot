@@ -3,22 +3,23 @@ package com.bit.web.controller;
 import com.bit.web.service.CustomerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * HomeController
+ * CoustomerController
  */
-@Controller
-public class HomeController {
-    @Autowired CustomerService customerService; 
-    @RequestMapping("/")   
+@RestController
+public class CoustomerController {
+    @Autowired CustomerService customerService;
+    @RequestMapping("/count")
     public String index() {
-        System.out.println("루트 URL 경로로 들어옴");
+        System.out.println("CustomerController count() 경로로 들어옴");
         int count = customerService.countAll();
-        System.out.println("고객의 총인원 : "+count);
-        return "index";
+        System.out.println("고객의 총인원 : " + count);
+        return count+"";
+
+
     }
-  
+    
 }

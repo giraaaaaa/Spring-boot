@@ -11,13 +11,11 @@ import org.springframework.stereotype.Repository;
  * @param <OrderDTO>
  */
 @Repository
-public interface OrderMapper<OrderDTO> {
+public interface OrderMapper {
     public void addOrder(OrderDTO Order);
     public List<OrderDTO> selectOrder(OrderDTO Order);
     public List<OrderDTO> selectOrderByOption(OrderDTO Order);
     public OrderDTO selectOrderByOrderId(OrderDTO Order);
     public void updateOrder(OrderDTO Order);
-    public void deleteOrder(OrderDTO Order);
-
-    
+    public void deleteOrder(OrderDTO Order);  
 }

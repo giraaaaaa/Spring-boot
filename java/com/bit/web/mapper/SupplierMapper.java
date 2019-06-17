@@ -20,5 +20,5 @@ public interface SupplierMapper {
     public void updateSupplier(SupplierDTO Supplier);
     public void deleteSupplier(SupplierDTO Supplier);
 
-    
+
 }

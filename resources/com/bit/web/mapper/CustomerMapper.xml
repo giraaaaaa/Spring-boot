@@ -10,12 +10,12 @@
    <id property="customerId" column = "CUSTOMER_ID"/>
    <result property = "customerName" column="CUSTOMER_NAME"/>
    <result property = "password" column="PASSWORD"/>
-   <result property = "SSN" column="ssn"/>
-   <result property = "PHONE" column="phone"/>
-   <result property = "CITY" column="city"/>
-   <result property = "ADDRESS" column="address"/>
-   <result property = "POSTALCODE" column="postalcode"/>
-   <result property = "PHOTO" column="photo"/>
+   <result property = "ssn" column="SSN"/>
+   <result property = "phone" column="PHONE"/>
+   <result property = "city" column="CITY"/>
+   <result property = "address" column="ADDRESS"/>
+   <result property = "postalcode" column="POSTALCODE"/>
+   <result property = "photo" column="PHOTO"/>
 </resultMap>
 
 
@@ -29,11 +29,16 @@
    </select>
 
    <select id="selectCustomersByOption" resultMap="customerMap" parameterType="com.bit.web.domain.CustomerDTO">
-     select * from CUSTOMERS where CUSTOMER_NAME = #{customerName}
+     select * from CUSTOMERS where CUSTOMER_NAME LIKE #{customerName}
    </select>
 
    <select id="selectCustomerBycustomerId" resultMap="customerMap" parameterType="string">
-       select * from CUSTOMERS where CUSTOMER_ID = #{value}
+       select * from CUSTOMERS where CUSTOMER_ID LIKE #{value}
+   </select>
+   <select id="login" resultMap="customerMap" parameterType="com.bit.web.domain.CustomerDTO">
+       select * from CUSTOMERS 
+       where CUSTOMER_ID LIKE #{customerId} 
+            and PASSWORD LIKE #{password}
    </select>
 
    <select id="selectCount" resultType="int">

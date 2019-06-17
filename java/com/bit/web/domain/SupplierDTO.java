@@ -18,5 +18,12 @@ public class SupplierDTO {
                     postalCode,
                     country,
                     phone;
+
+    public void setCity(String city){
+             this.city = city;
+        }
+    public String getCity(){
+        return this.city;
+    }
     
 }

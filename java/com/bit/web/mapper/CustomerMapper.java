@@ -17,6 +17,8 @@ public interface CustomerMapper {
     public CustomerDTO selectCustomerByCustomerId(String customerId);
     public void updateCustomer(CustomerDTO customer);
     public void deleteCustomer(CustomerDTO customer);
-	public int selectCount();
+    public int selectCount();
+    public CustomerDTO login(CustomerDTO customer);
+    //로그인할때 id pw정보를 모두 보내야하기때문에 login전체정보를 mapping해야한다.
     
 }

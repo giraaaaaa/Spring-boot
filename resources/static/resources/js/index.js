@@ -9,10 +9,10 @@ var app = (()=>{
         wrapper.innerHTML =
         '<form action="/action_page.php">'
         +'  First name:<br>'
-        +'  <input type="text" name="firstname" value="Mickey">'
+        +'  <input type="text" id="customerId" name="customerId">'
         +'  <br>'
         +'  Last name:<br>'
-        +'  <input type="text" name="lastname" value="Mouse">'
+        +'  <input type="text" id="password" name="password">'
         +'  <br><br>'
         +'  <input id="login_btn" type="button" value="로그인">'
         +'  <input id="signin_btn" type="button" value="회원가입">'
@@ -25,8 +25,37 @@ var app = (()=>{
        
             let login_btn = document.querySelector('#login_btn');
             login_btn.addEventListener('click', ()=>{
-                alert("로그인 버튼 성공");
-                count();
+                alert("로그인 버튼 클릭");
+                id = document.getElementById('customerId').value;
+                pass = document.getElementById('password').value;
+                let xhr = new XMLHttpRequest(),
+                    method = 'GET',
+                    url = 'login/'+ id +'/' + pass;
+                xhr.open(method,url,true);
+                xhr.onreadystatechange=()=>{
+                    if(xhr.readyState === 4 && xhr.status===200 ){
+                        let d = xhr.responseText;
+                        if(d ==='SUCCESS'){
+                            let wrapper = document.querySelector('#wrapper');
+                            wrapper.innerHTML = '<h1>마이페이지!!!</h1>'
+                            alert('ajax 성공'+xhr.responseText);
+                        }else{
+                            let wrapper = document.querySelector('#wrapper');
+                            wrapper.innerHTML =
+                            '<form action="/action_page.php">'
+                            +'  First name:<br>'
+                            +'  <input type="text" id="customerId" name="customerId">'
+                            +'  <br>'
+                            +'  Last name:<br>'
+                            +'  <input type="text" id="password" name="password">'
+                            +'  <br><br>'
+                            +'  <input id="login_btn" type="button" value="로그인">'
+                            +'  <input id="signin_btn" type="button" value="회원가입">'
+                            +'</form> '
+                        }
+                    }
+                }
+                xhr.send();
             });
     }   
     let count =()=>{

@@ -17,7 +17,7 @@ public class HomeController {
     public String index() {
         System.out.println("루트 URL 경로로 들어옴");
         int count = customerService.countAll();
-        System.out.println("고객의 총인원 : "+count);
+        System.out.println("고객의 총인원 : "+ count);
         return "index";
     }
   

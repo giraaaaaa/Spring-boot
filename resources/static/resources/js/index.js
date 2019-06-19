@@ -12,6 +12,7 @@ var customer = {
     count : count,
     login : login,
     mypage : mypage,
+    mypage_form : mypage_form,
     remove : remove,
     update : update,
     update_form : update_form
@@ -47,35 +48,8 @@ var customer = {
                let d = JSON.parse(xhr.responseText);
                alert('로그인 성공 후 이름' +d.customerName)
                if(d){
-                   $wrapper.innerHTML = customer.mypage(d);
-                   document.querySelector('#update-btn')
-                           .addEventListener('click',e=>{
-                            $wrapper.innerHTML = customer.update_form(d);
-                            e.preventDefault();
-                      
-                            document.querySelector('#complete-btn')
-                                    .addEventListener('click',e=>{
-                                     var update_data ={
-                                                        customerId : d.customerId,
-                                                        customerName : document.getElementById("customerName").value,
-                                                        password : document.getElementById("password").value,
-                                                        ssn : d.ssn,
-                                                        phone : document.getElementById("phone").value,
-                                                        city : document.getElementById("city").value,
-                                                        address : document.getElementById("address").value,
-                                                        postalcode : document.getElementById("postalcode").value
-                                                        }
-                                    update(update_data);
-                                     e.preventDefault();
-                                    })
-                            document.querySelector('#cancel-btn')
-                                    .addEventListener('click',e=>{
-                                       customer.mypage(d);
-                                        e.preventDefault();
-                                    })
-                                
-                            
-    })
+                    customer.mypage(d);
+                         
                }else{
                    $wrapper.innerHTML = customer.login_form();
                }
@@ -168,12 +142,27 @@ var customer = {
    }
 
 function mypage (x){
-    let custom = x;
+    $wrapper.innerHTML = customer.mypage_form(x);
     
-    alert('마이페이지로 넘어온 객체명 :' + custom.customerName)
+    alert('마이페이지로 넘어온 객체명 :' + x.customerName)
+    document.querySelector('#update-btn')
+    .addEventListener('click',e=>{
+    customer.update(x);
+    e.preventDefault();
 
-    return '<form>'
-    +'<spen>' + custom.customerName + '마이페이지' + '<br />'
+    
+    })
+    document.querySelector('#remove-btn')
+    .addEventListener('click',e=>{
+     $wrapper.innerHTML = customer.remove(x);
+     e.preventDefault();
+    })   
+    
+
+};
+function mypage_form(x){
+    let custom = x;
+    return '<spen>' + custom.customerName + '마이페이지' + '<br />'
     +'<spen> ID : ' + custom.customerId + '</spen><br/>'
     +'<spen> PW : ' + custom.password + '</spen><br/>'
     +'<spen> Name : ' + custom.customerName + '</spen><br/>'
@@ -184,9 +173,7 @@ function mypage (x){
     +'<spen> postalcode : ' + custom.postalcode + '</spen><br/>'
     +'<input id="update-btn" type="button" value="수  정">'
     +'<input id="remove-btn" type="button" value="탈  퇴">'
-    
-};
-
+}
 function update_form(x){
     let update = x;
     let template = '<form>'
@@ -212,49 +199,72 @@ function update_form(x){
 function update(x){
     let wrapper = document.querySelector('#wrapper');
     wrapper.innerHTML = customer.update_form(x);
-    
+   
     alert(x.customerId);
     
-    var xhr = new XMLHttpRequest();
-
-        xhr.open('PUT', 'customers/'+x.customerId, true);
-        xhr.setRequestHeader('Content-type','application/json;charset=UTF-8');
-        xhr.onload=()=>{ 
-            if(xhr.readyState=== 4 && xhr.status === 200){
-                let d = JSON.parse(xhr.responseText);
-                alert('수정완료' +x.customerName)
-                alert(d);
-                if(d){
-                    alert('수정완료' + d.result);
-                    $wrapper.innerHTML = customer.mypage(x);
-                }else{
-                    alert("수정실패")
-                    $wrapper.innerHTML = customer.login_form();
-                }
-            }else{
-                alert("수정실패2")
-
+    document.querySelector('#complete-btn')
+            .addEventListener('click',e=>{
+            e.preventDefault();
+            let update_data ={
+                customerId : x.customerId,
+                customerName : document.getElementById("customerName").value,
+                password : document.getElementById("password").value,
+                ssn : x.ssn,
+                phone : document.getElementById("phone").value,
+                city : document.getElementById("city").value,
+                address : document.getElementById("address").value,
+                postalcode : document.getElementById("postalcode").value
             }
-         };
-     xhr.send(JSON.stringify(x));
+            alert(x.customerId);
+            var xhr = new XMLHttpRequest();
+            xhr.open('PUT', 'customers/'+x.customerId, true);
+            xhr.setRequestHeader('Content-type','application/json;charset=UTF-8');
+            xhr.onload=()=>{ 
+                if(xhr.readyState=== 4 && xhr.status === 200){
+                    let d = JSON.parse(xhr.responseText);
+                    alert('수정완료' +d.customerName)
+                    alert(d);
+                    if(d){
+                        alert('수정완료' + d.result);
+                        $wrapper.innerHTML = login_form();
+                    }else{
+                        alert("수정실패")
+                        $wrapper.innerHTML = login_form();
+                    }
+                }else{
+                    alert("수정실패2")
+
+                }
+            };
+            xhr.send(JSON.stringify(update_data));
+
+    })
+    document.querySelector('#cancel-btn')
+            .addEventListener('click',e=>{
+            customer.mypage(x);
+            e.preventDefault();
+    })
+        
     }
     
-function remove(){
-    let customerId = document.getElementById(customerId);
+function remove(x){
     let xhr = new XMLHttpRequest();
-    xhr.open('delete','customers/' + customerId,true);
+    xhr.open('delete','customers/' + x.customerId,true);
+    xhr.setRequestHeader('Content-type','application/json;charset=UTF-8');
     xhr.onload=()=>{ 
         if(xhr.readyState=== 4 && xhr.status === 200){
             let d = JSON.parse(xhr.responseText);
-            alert('로그인 성공 후 이름' +d.customerName)
+            alert('탈퇴된 회원 이름 : ' +x.customerName)
             if(d){
-                $wrapper.innerHTML = customer.mypage(d);
+                alert('회원 탈퇴 완료')
+                app.init();
             }else{
-                $wrapper.innerHTML = customer.login_form();
+                alert('회원 탈퇴 실패')
+                app.init();
             }
         }
      };
-        xhr.send();
+        xhr.send(JSON.stringify(x));
 }
 
 

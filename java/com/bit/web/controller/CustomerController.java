@@ -1,12 +1,16 @@
 package com.bit.web.controller;
 
+import java.util.HashMap;
+
 import com.bit.web.domain.CustomerDTO;
 import com.bit.web.service.CustomerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,9 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
-   @Autowired CustomerService customerService;
-   @Autowired CustomerDTO customer;
-
+    @Autowired CustomerService customerService;
+    @Autowired CustomerDTO customer;
 
    @RequestMapping("/count")  //루트 URL
    public String count() {
@@ -39,11 +42,65 @@ public class CustomerController {
    }
 
    @PostMapping("")
-   public CustomerDTO join(@RequestBody CustomerDTO param){
-       System.out.println("=====post mapping======");
-       System.out.println(param.getCustomerId());
-       System.out.println(param.getPassword());
-       System.out.println(param.getCustomerName());
-       return customerService.login(customer);
+   public HashMap<String,Object> join(@RequestBody CustomerDTO param){
+        System.out.println("=====post mapping======");
+        System.out.println(param.getCustomerId());
+        System.out.println(param.getPassword());
+        System.out.println(param.getSsn());
+        System.out.println(param.getAddress());
+        System.out.println("=====post mapping======");
+
+        
+        customer.setCustomerId(param.getCustomerId());
+        customer.setPassword(param.getPassword());
+        customer.setCustomerName(param.getCustomerName());
+        customer.setSsn(param.getSsn());
+        customer.setPhone(param.getPhone());
+        customer.setCity(param.getCity());
+        customer.setAddress(param.getAddress());
+        customer.setPostalcode(param.getPostalcode());
+        customerService.insertCustomer(customer);
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("result", "SUCCESS");
+        return map;
+   }
+   @GetMapping("/{customerId}")
+   public CustomerDTO search() {
+        customerService.findCustomers();
+       return customer;
+   }
+   @PutMapping("/{customerId}")
+   public HashMap<String,Object> update(@RequestBody CustomerDTO param) {
+
+            System.out.println("=====post mapping======");
+            System.out.println(param.getCustomerId());
+            System.out.println(param.getPassword());
+            System.out.println(param.getSsn());
+            System.out.println(param.getAddress());
+            System.out.println("=====post mapping======");
+
+            
+            customer.setCustomerId(param.getCustomerId());
+            customer.setPassword(param.getPassword());
+            customer.setCustomerName(param.getCustomerName());
+            customer.setSsn(param.getSsn());
+            customer.setPhone(param.getPhone());
+            customer.setCity(param.getCity());
+            customer.setAddress(param.getAddress());
+            customer.setPostalcode(param.getPostalcode());
+
+
+            customerService.updateCustomer(customer);
+            HashMap<String,Object> map = new HashMap<>();
+
+            map.put("result", "SUCCESS");
+        return map;   
+    }
+   @DeleteMapping("/{customerId}")
+   public HashMap<String,Object> delete(@RequestBody CustomerDTO param) {
+        customerService.deleteCustomer(customer);
+        HashMap<String,Object> map = new HashMap<>();
+
+    return map;
    }
 }

@@ -34,7 +34,7 @@ return '<h2>고객 목록</h2>'
 +'   <th>주민번호</th>'
 +'   <th>전화번호</th>'
 +'   <th>도시</th>'
-+' </tr>'
++' </tr><tbody id ="tbody"></tbody>' 
 +'</table>'
 }
 function set_value(x){
@@ -92,9 +92,15 @@ function customer_list(){
             // let d = JSON.parse(xhr.responseText);
             let wrapper = document.querySelector('#wrapper');
             wrapper.innerHTML = employee.customer_list_form();
-            let node_tr = document.createElement("<tr><td>"+'AAA'+"</td><td>" + 'AAA' + "</td>"
-                                                +"</td>" + 'AAA' + "<td></td>" + 'AAA' + "<td><td>" + 'AAA' + "</td></tr>");
-            document.getElementById("tab-header").appendChild(node);
+            let tbody = document.getElementById('tbody');
+            let i = 0;
+            let rows = '';
+            for(;i<5; i++){
+                rows += "<tr><td>"+i+"</td><td>"+i+"</td>"+
+                "<td>"+i+"</td><td>"+i+"</td><td>"+i+"</td></tr>"
+            }
+            
+            tbody.innerHTML=rows;
         }
     };
     xhr.send();

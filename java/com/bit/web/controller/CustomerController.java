@@ -1,7 +1,10 @@
 package com.bit.web.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import com.bit.web.common.util.Printer;
 import com.bit.web.domain.CustomerDTO;
 import com.bit.web.service.CustomerService;
 
@@ -13,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -24,20 +26,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
     @Autowired CustomerService customerService;
     @Autowired CustomerDTO customer;
-
+    @Autowired Printer p;
    @RequestMapping("/count")  //루트 URL
    public String count() {
        System.out.println("CustomerController count() 경로로 들어옴");
        int count = customerService.countAll();
-       System.out.println("고객의 총인원 : " + count);
+       p.accecpt("람다가 출력한 고객의 총 인원 : " + count);
        return "총 고객수 : "+count+"";  //views에 customer.html이아닌 제이슨으로 바뀜, 주소를 넘기는게 아닌 데이터를 넘김     대신에 받는쪽에서 ajax사용
    }
 
    @GetMapping("/{customerId}/{password}")
    public CustomerDTO login(@PathVariable("customerId")String id,
                        @PathVariable("password")String pass){
+                           System.out.println("도착");
        customer.setCustomerId(id);
        customer.setPassword(pass);
+  
        return customerService.login(customer);
    }
 
@@ -97,10 +101,27 @@ public class CustomerController {
         return map;   
     }
    @DeleteMapping("/{customerId}")
-   public HashMap<String,Object> delete(@RequestBody CustomerDTO param) {
+   public HashMap<String,Object> delete(@PathVariable("customerId") String customerId) {
+        customer.setCustomerId(customerId);
         customerService.deleteCustomer(customer);
         HashMap<String,Object> map = new HashMap<>();
 
     return map;
    }
+   @GetMapping("")
+    public List<CustomerDTO> list(){
+        List<CustomerDTO> list = new ArrayList<>();
+        // list = customerService.findCustomers();
+        // for (CustomerDTO customer : list) {
+        //     System.out.println(customer.getCustomerId()+" : "
+        //                     +customer.getCustomerName()+" : "
+        //                     +customer.getPassword()+" : "
+        //                     +customer.getSsn()+" : "
+        //                     +customer.getPhone()+" : "
+        //                     +customer.getCity()+" : "
+        //                     +customer.getAddress()+" : "
+        //                     +customer.getPostalcode());
+        // }
+        return list;
+    }
 }

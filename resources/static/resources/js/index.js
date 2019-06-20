@@ -2,8 +2,6 @@
 var app =  {
    $wrapper : $wrapper = document.querySelector('#wrapper'),
    init : init
-   
-   
 };
 var customer = {
     login_form : login_form,
@@ -16,47 +14,122 @@ var customer = {
     remove : remove,
     update : update,
     update_form : update_form
+};
+var employee = {
+    login : login,
+    admin_login : admin_login,
+    customer_list : customer_list,
+    customer_list_form : customer_list_form
+};
+var session = {
+    set_value  : set_value,
+    get_value  : get_value
+};
+function customer_list_form(){
+return '<h2>고객 목록</h2>'
++'<table>'
++' <tr>'
++'   <th>아이디</th>'
++'   <th>고객명</th>'
++'   <th>주민번호</th>'
++'   <th>전화번호</th>'
++'   <th>도시</th>'
++' </tr>'
++'</table>'
 }
-
-   function init(){
-       $wrapper.innerHTML = customer.login_form();
-       document.querySelector('#join-btn')
-               .addEventListener('click',()=>{
-                    $wrapper.innerHTML = customer.join_form();
-                    document.getElementById('confirm-btn')
-                            .addEventListener('click', e=>{
-                                e.preventDefault();
-                                alert('조인버튼 클릭');
-                                customer.join();
-           });
-       });
-       document.querySelector('#login-btn')
-                .addEventListener('click',e=>{
-                e.preventDefault();
-                customer.login();
-                });
-       
-
-   }
-   function login(){
-        id = document.getElementById('customerId').value;
-        pass = document.getElementById('password').value;
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'customers/'+id+'/'+pass, true);
-        xhr.onload=()=>{ 
-           if(xhr.readyState=== 4 && xhr.status === 200){
-               let d = JSON.parse(xhr.responseText);
-               alert('로그인 성공 후 이름' +d.customerName)
-               if(d){
-                    customer.mypage(d);
-                         
-               }else{
-                   $wrapper.innerHTML = customer.login_form();
-               }
-           }
-        };
-           xhr.send();
+function set_value(x){
+    sessionStorage.setItem(x.name,x.value);
+}
+function get_value(x) {
+    return sessionStorage.getItem(x);
+}
+function init(){
+    $wrapper.innerHTML = customer.login_form();
+    document.querySelector('#join-btn')
+            .addEventListener('click',()=>{
+                $wrapper.innerHTML = customer.join_form();
+                document.getElementById('confirm-btn')
+                        .addEventListener('click', e=>{
+                            e.preventDefault();
+                            customer.join();
+            });
+    });
+    document.querySelector('#login-btn')
+            .addEventListener('click',e=>{
+            e.preventDefault();
+            customer.login(
+                {
+                    userid : 'customerId',
+                    domain : 'customers'
+                }
+            );
+    });
+    document.querySelector('#admin-btn')
+            .addEventListener('click',e=>{
+            e.preventDefault();
+            alert('관리자 버튼 클릭');
+            employee.admin_login();
+    });
+}
+function admin_login(){
+    let isAdmin = confirm("관리자입니까?");
+    if(isAdmin){
+        let pass = prompt("관리자 번호를 입력하세요");
+        if(pass == 1000){
+            employee.customer_list();
+        }else{
+            alert('입력한 번호가 일치하지 않습니다.');    
+        }
+    }else{
+        alert('관리자만 접속이 가능합니다.');
     }
+}
+function customer_list(){
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', 'customers', true);
+    xhr.onload=()=>{
+        if(xhr.readyState=== 4 && xhr.status === 200){
+            // let d = JSON.parse(xhr.responseText);
+            let wrapper = document.querySelector('#wrapper');
+            wrapper.innerHTML = employee.customer_list_form();
+            let node_tr = document.createElement("<tr><td>"+'AAA'+"</td><td>" + 'AAA' + "</td>"
+                                                +"</td>" + 'AAA' + "<td></td>" + 'AAA' + "<td><td>" + 'AAA' + "</td></tr>");
+            document.getElementById("tab-header").appendChild(node);
+        }
+    };
+    xhr.send();
+}
+function login(x){
+  
+    id = document.getElementById(x.userid).value;
+    pass = document.getElementById('password').value;
+    alert(id)
+    alert(pass)
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', x.domain+'/'+id+'/'+pass, true);
+    
+    
+    xhr.onload=()=>{
+        if(xhr.readyState=== 4 && xhr.status === 200){
+             let d = JSON.parse(xhr.responseText);
+
+            alert('세션에 들어간 이름: '+d.customerId)
+            session.set_value({'name':'userid','value':d.customerId});
+            session.set_value({'name':'username','value':d.customerName});
+            if(d){
+                if(x.domain==='customers'){
+                    customer.mypage(d);
+                }else{
+                    employee.customer_list();
+                }
+            }else{
+                app.init();
+            }
+            
+        }
+    };
+    xhr.send();
+}
    function login_form(){
     return '<form action="/action_page.php">'
     +'  ID:<br>'
@@ -67,34 +140,35 @@ var customer = {
     +'  <br><br>'
     +'  <input id="login-btn" type="button" value="LOGIN">'
     +'  <input id="join-btn" type="button" value="JOIN">'
+    +'  <input id="admin-btn" type="button" value="관리자">'
     +'</form> ';
  };
  
  function join(){
     let xhr = new XMLHttpRequest()
     let data = {
-     customerId : document.getElementById("customerId").value,
-     customerName : document.getElementById("customerName").value,
-     password : document.getElementById("password").value,
-     ssn : document.getElementById("ssn").value,
-     phone : document.getElementById("phone").value,
-     city : document.getElementById("city").value,
-     address : document.getElementById("address").value,
-     postalcode : document.getElementById("postalcode").value
+        customerId : document.getElementById("customerId").value,
+        customerName : document.getElementById("customerName").value,
+        password : document.getElementById("password").value,
+        ssn : document.getElementById("ssn").value,
+        phone : document.getElementById("phone").value,
+        city : document.getElementById("city").value,
+        address : document.getElementById("address").value,
+        postalcode : document.getElementById("postalcode").value
     };
     xhr.open('POST','customers',true);
     xhr.setRequestHeader('Content-type','application/json;charset=UTF-8');
     xhr.onload=()=>{
-         if(xhr.readyState === 4 && xhr.status === 200){
-             let d = JSON.parse(xhr.responseText);
-             if(d.result === 'SUCCESS'){
+        if(xhr.readyState === 4 && xhr.status === 200){
+            let d = JSON.parse(xhr.responseText);
+            if(d.result === 'SUCCESS'){
                  alert('회원가입 성공' + d.result);
                  $wrapper.innerHTML = customer.login_form();
-             }else{
+            }else{
                  alert('회원가입 실패');
-             }
+            }
              
-         }
+        }
          else{
              alert('ajax 실패');
          }
@@ -102,7 +176,9 @@ var customer = {
  //    
     xhr.send(JSON.stringify(data));
 }
-    
+
+
+
  function join_form(){
     return '<form>'
     +'I D<br>'
@@ -147,7 +223,8 @@ function mypage (x){
     alert('마이페이지로 넘어온 객체명 :' + x.customerName)
     document.querySelector('#update-btn')
     .addEventListener('click',e=>{
-    customer.update(x);
+        alert('세션 테스트' + session.get_value('user'));
+    // customer.update(x);
     e.preventDefault();
 
     

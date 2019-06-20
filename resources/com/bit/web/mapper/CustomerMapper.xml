@@ -24,9 +24,9 @@
        values (#{customerId},#{customerName},#{password},#{ssn},#{phone},#{city},#{address},#{postalcode},#{photo})
    </insert>
 
-   <select id="selectCustomers" resultMap="customerMap">
+   <!-- <select id="selectCustomers" resultMap="customerMap">
        select * from CUSTOMERS
-   </select>
+   </select> -->
 
    <select id="selectCustomersByOption" resultMap="customerMap" parameterType="com.bit.web.domain.CustomerDTO">
      select * from CUSTOMERS where CUSTOMER_NAME LIKE #{customerName}
@@ -45,6 +45,18 @@
        select count(*) as count from CUSTOMERS
    </select>
 
+
+    <select id="selectCustomers" resultMap="customerMap"
+            parameterType="com.bit.web.common.util.PageProxy">
+            SELECT @ROWNUM:=@ROWNUM+1 AS rownum,
+                    C.*
+            FROM CUSTOMERS C, (SELECT @ROWNUM:=0)TMP
+            ORDER BY rownum DESC
+            LIMIT #{startRow}, #{pageSize}
+    </select>
+
+
+
    <update id="updateCustomer" parameterType="com.bit.web.domain.CustomerDTO">
        update CUSTOMERS set
        CUSTOMER_NAME = #{customerName},
@@ -60,5 +72,9 @@
    <delete id="deleteCustomer" parameterType="com.bit.web.domain.CustomerDTO">
        delete from CUSTOMERS where CUSTOMER_ID = #{customerId}
    </delete>
+
+
+
+
 
 </mapper>

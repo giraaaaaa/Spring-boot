@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.bit.web.common.util.PageProxy;
 import com.bit.web.common.util.Printer;
 import com.bit.web.domain.CustomerDTO;
 import com.bit.web.service.CustomerService;
@@ -20,13 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
 * CustomerController
+ * @param <p>
 */
 @RestController
 @RequestMapping("/customers")
-public class CustomerController {
+public class CustomerController<p> {
     @Autowired CustomerService customerService;
     @Autowired CustomerDTO customer;
-    @Autowired Printer p;
+    @Autowired Printer p; 
+    @Autowired PageProxy pxy;
    @RequestMapping("/count")  //루트 URL
    public String count() {
        System.out.println("CustomerController count() 경로로 들어옴");
@@ -68,11 +71,11 @@ public class CustomerController {
         map.put("result", "SUCCESS");
         return map;
    }
-   @GetMapping("/{customerId}")
-   public CustomerDTO search() {
-        customerService.findCustomers();
-       return customer;
-   }
+//    @GetMapping("/{customerId}")
+//    public CustomerDTO search() {
+//         customerService.findCustomers(PageProxy pxy);
+//        return customer;
+//    }
    @PutMapping("/{customerId}")
    public HashMap<String,Object> update(@RequestBody CustomerDTO param) {
 
@@ -108,10 +111,22 @@ public class CustomerController {
 
     return map;
    }
-   @GetMapping("")
-    public List<CustomerDTO> list(){
-        List<CustomerDTO> list = new ArrayList<>();
-        // list = customerService.findCustomers();
+   @GetMapping("/page/{pageNum}")
+    public HashMap<String, Object> list(@PathVariable String pageNum){
+        // List<CustomerDTO> list = new ArrayList<>();
+        //rowCount, pageNum, pageSize, blockSize
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("totalCount", customerService.countAll());
+        map.put("page_num", pageNum);
+        map.put("page_size", "5");
+        map.put("block_size", "5");
+
+        pxy.execute(map);
+        map.put("list",customerService.findCustomers(pxy));
+        map.put("pxy",pxy);
+        return map;
+        
+        // list = customerService.findCustomers(pxy);
         // for (CustomerDTO customer : list) {
         //     System.out.println(customer.getCustomerId()+" : "
         //                     +customer.getCustomerName()+" : "
@@ -122,6 +137,5 @@ public class CustomerController {
         //                     +customer.getAddress()+" : "
         //                     +customer.getPostalcode());
         // }
-        return list;
     }
 }
